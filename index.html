@@ -1,0 +1,849 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PodcastGPT - AI-Powered Podcast Research Assistant</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #ffffff;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            padding: 1rem 0;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #6B46C1;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #4B5563;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #6B46C1;
+        }
+
+        .cta-button {
+            background: #6B46C1;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: background 0.3s, transform 0.2s;
+        }
+
+        .cta-button:hover {
+            background: #553C9A;
+            transform: translateY(-2px);
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 120px 0 80px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            margin-bottom: 2.5rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .hero-cta {
+            display: inline-flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .primary-button {
+            background: white;
+            color: #6B46C1;
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: transform 0.2s, box-shadow 0.3s;
+        }
+
+        .primary-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+
+        .secondary-button {
+            background: transparent;
+            color: white;
+            padding: 1rem 2rem;
+            border: 2px solid white;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: background 0.3s;
+        }
+
+        .secondary-button:hover {
+            background: rgba(255,255,255,0.1);
+        }
+
+        /* Features Section */
+        .features {
+            padding: 80px 0;
+            background: #f9fafb;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-header h2 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #1f2937;
+            margin-bottom: 1rem;
+        }
+
+        .section-header p {
+            font-size: 1.1rem;
+            color: #6b7280;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .feature-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px rgba(0,0,0,0.1);
+        }
+
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            background: #6B46C1;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+        }
+
+        .feature-card h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: #1f2937;
+        }
+
+        .feature-card p {
+            color: #6b7280;
+            line-height: 1.7;
+        }
+
+        /* How It Works */
+        .how-it-works {
+            padding: 80px 0;
+        }
+
+        .steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .step {
+            text-align: center;
+            position: relative;
+        }
+
+        .step-number {
+            width: 60px;
+            height: 60px;
+            background: #3B82F6;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin: 0 auto 1.5rem;
+        }
+
+        .step h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: #1f2937;
+        }
+
+        .step p {
+            color: #6b7280;
+        }
+
+        /* Pricing */
+        .pricing {
+            padding: 80px 0;
+            background: #f9fafb;
+        }
+
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .pricing-card {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            transition: transform 0.3s, box-shadow 0.3s;
+            position: relative;
+        }
+
+        .pricing-card.featured {
+            border: 2px solid #6B46C1;
+            transform: scale(1.05);
+        }
+
+        .pricing-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px rgba(0,0,0,0.1);
+        }
+
+        .pricing-card.featured:hover {
+            transform: scale(1.05) translateY(-5px);
+        }
+
+        .pricing-card h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: #1f2937;
+        }
+
+        .price {
+            font-size: 3rem;
+            font-weight: 700;
+            color: #6B46C1;
+            margin-bottom: 1.5rem;
+        }
+
+        .price span {
+            font-size: 1rem;
+            color: #6b7280;
+            font-weight: 400;
+        }
+
+        .features-list {
+            list-style: none;
+            margin-bottom: 2rem;
+        }
+
+        .features-list li {
+            padding: 0.5rem 0;
+            color: #4b5563;
+            position: relative;
+            padding-left: 1.5rem;
+        }
+
+        .features-list li::before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #10b981;
+            font-weight: bold;
+        }
+
+        .pricing-button {
+            width: 100%;
+            background: #6B46C1;
+            color: white;
+            padding: 1rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .pricing-button:hover {
+            background: #553C9A;
+        }
+
+        /* Testimonials */
+        .testimonials {
+            padding: 80px 0;
+        }
+
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .testimonial {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            border-left: 4px solid #6B46C1;
+        }
+
+        .testimonial-content {
+            font-style: italic;
+            margin-bottom: 1.5rem;
+            color: #4b5563;
+            line-height: 1.7;
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .author-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #6B46C1, #3B82F6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+        }
+
+        .author-info h4 {
+            font-weight: 600;
+            color: #1f2937;
+        }
+
+        .author-info p {
+            color: #6b7280;
+            font-size: 0.9rem;
+        }
+
+        /* FAQ */
+        .faq {
+            padding: 80px 0;
+            background: #f9fafb;
+        }
+
+        .faq-list {
+            max-width: 800px;
+            margin: 3rem auto 0;
+        }
+
+        .faq-item {
+            background: white;
+            margin-bottom: 1rem;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .faq-question {
+            padding: 1.5rem;
+            font-weight: 600;
+            color: #1f2937;
+            cursor: pointer;
+            border: none;
+            background: none;
+            width: 100%;
+            text-align: left;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .faq-answer {
+            padding: 0 1.5rem 1.5rem;
+            color: #6b7280;
+            line-height: 1.7;
+        }
+
+        /* Footer */
+        footer {
+            background: #1f2937;
+            color: white;
+            padding: 40px 0;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .footer-section h4 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: white;
+        }
+
+        .footer-section p,
+        .footer-section a {
+            color: #9ca3af;
+            text-decoration: none;
+            line-height: 1.7;
+        }
+
+        .footer-section a:hover {
+            color: white;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid #374151;
+            margin-top: 2rem;
+            padding-top: 2rem;
+            text-align: center;
+            color: #9ca3af;
+        }
+
+        /* Email Signup */
+        .email-signup {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .email-signup input {
+            flex: 1;
+            padding: 0.75rem;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 1rem;
+        }
+
+        .email-signup button {
+            background: #6B46C1;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background 0.3s;
+        }
+
+        .email-signup button:hover {
+            background: #553C9A;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero-cta {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .section-header h2 {
+                font-size: 2rem;
+            }
+
+            .container {
+                padding: 0 15px;
+            }
+        }
+
+        /* Smooth Scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="container">
+            <div class="nav-container">
+                <div class="logo">🎤 PodcastGPT</div>
+                <ul class="nav-links">
+                    <li><a href="#features">Features</a></li>
+                    <li><a href="#how-it-works">How It Works</a></li>
+                    <li><a href="#pricing">Pricing</a></li>
+                    <li><a href="#testimonials">Testimonials</a></li>
+                    <li><a href="#faq">FAQ</a></li>
+                </ul>
+                <a href="#pricing" class="cta-button">Start Free Trial</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <h1>Stop Spending Hours on Interview Research</h1>
+            <p>PodcastGPT generates comprehensive research briefs, intelligent questions, and follow-up topics for your podcast guests in minutes, not hours.</p>
+            <div class="hero-cta">
+                <a href="#pricing" class="primary-button">Start Your Free Trial</a>
+                <a href="#how-it-works" class="secondary-button">See How It Works</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="features">
+        <div class="container">
+            <div class="section-header">
+                <h2>Everything You Need for Better Interviews</h2>
+                <p>Purpose-built for podcast hosts who want to create engaging conversations without the research burnout</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🧠</div>
+                    <h3>AI Research Briefs</h3>
+                    <p>Get comprehensive background research on your guests automatically. Our AI scours LinkedIn, websites, previous interviews, and publications to create detailed briefs in minutes.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">❓</div>
+                    <h3>Smart Question Generation</h3>
+                    <p>Generate thought-provoking questions tailored to your guest's expertise and your show's style. Create natural conversation flows that keep listeners engaged.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🎯</div>
+                    <h3>Follow-Up Angle Detection</h3>
+                    <p>Discover unique angles and talking points others miss. Our AI identifies controversial topics, trending connections, and viral moment opportunities.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📱</div>
+                    <h3>Real-Time Interview Support</h3>
+                    <p>Use our mobile app during interviews for real-time fact-checking, suggested follow-ups, and conversation prompts when you need them most.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section id="how-it-works" class="how-it-works">
+        <div class="container">
+            <div class="section-header">
+                <h2>From Guest Name to Great Interview in 3 Steps</h2>
+                <p>Transform your interview preparation process and create conversations that stand out</p>
+            </div>
+            <div class="steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <h3>Add Your Guest</h3>
+                    <p>Simply enter your guest's name and basic info. Our AI automatically finds their online presence, expertise areas, and recent content.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <h3>Get Your Brief</h3>
+                    <p>Receive a comprehensive research brief with background, talking points, suggested questions, and potential follow-up angles within minutes.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <h3>Conduct Amazing Interviews</h3>
+                    <p>Use our mobile app for real-time support during recording, with fact-checking and conversation prompts at your fingertips.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing -->
+    <section id="pricing" class="pricing">
+        <div class="container">
+            <div class="section-header">
+                <h2>Choose Your Plan</h2>
+                <p>Start saving hours on research while creating better interviews. All plans include a 14-day free trial.</p>
+            </div>
+            <div class="pricing-grid">
+                <div class="pricing-card">
+                    <h3>Starter</h3>
+                    <div class="price">$29<span>/month</span></div>
+                    <ul class="features-list">
+                        <li>5 research briefs per month</li>
+                        <li>Basic question generation</li>
+                        <li>Web scraping & analysis</li>
+                        <li>Email templates</li>
+                        <li>Mobile app access</li>
+                    </ul>
+                    <button class="pricing-button">Start Free Trial</button>
+                </div>
+                <div class="pricing-card featured">
+                    <h3>Pro</h3>
+                    <div class="price">$79<span>/month</span></div>
+                    <ul class="features-list">
+                        <li>25 research briefs per month</li>
+                        <li>Advanced question trees</li>
+                        <li>Social media analysis</li>
+                        <li>CRM integration</li>
+                        <li>Episode planning tools</li>
+                        <li>Priority support</li>
+                    </ul>
+                    <button class="pricing-button">Start Free Trial</button>
+                </div>
+                <div class="pricing-card">
+                    <h3>Studio</h3>
+                    <div class="price">$199<span>/month</span></div>
+                    <ul class="features-list">
+                        <li>Unlimited research briefs</li>
+                        <li>Team collaboration</li>
+                        <li>Custom AI prompts</li>
+                        <li>API access</li>
+                        <li>White-label options</li>
+                        <li>Dedicated account manager</li>
+                    </ul>
+                    <button class="pricing-button">Start Free Trial</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section id="testimonials" class="testimonials">
+        <div class="container">
+            <div class="section-header">
+                <h2>Loved by Podcast Hosts Worldwide</h2>
+                <p>See how PodcastGPT is transforming interview preparation for creators like you</p>
+            </div>
+            <div class="testimonials-grid">
+                <div class="testimonial">
+                    <div class="testimonial-content">
+                        "PodcastGPT cut my research time from 4 hours to 30 minutes per guest. The questions it generates are so much better than what I was coming up with manually. My interviews feel more natural and engaging now."
+                    </div>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">SM</div>
+                        <div class="author-info">
+                            <h4>Sarah Martinez</h4>
+                            <p>Host, Tech Entrepreneur Podcast (15K downloads/month)</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial">
+                    <div class="testimonial-content">
+                        "The real-time fact-checking during interviews is a game-changer. I caught several inaccuracies that would have made me look unprepared. My audience notices the difference in interview quality."
+                    </div>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">DJ</div>
+                        <div class="author-info">
+                            <h4>David Johnson</h4>
+                            <p>Host, Business Leaders Weekly (8K downloads/month)</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial">
+                    <div class="testimonial-content">
+                        "As someone managing multiple corporate podcasts, PodcastGPT scaled our content production without hiring more researchers. The team collaboration features are perfect for our workflow."
+                    </div>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">LR</div>
+                        <div class="author-info">
+                            <h4>Lisa Rodriguez</h4>
+                            <p>Podcast Producer, Fortune 500 Company</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ -->
+    <section id="faq" class="faq">
+        <div class="container">
+            <div class="section-header">
+                <h2>Frequently Asked Questions</h2>
+                <p>Everything you need to know about PodcastGPT</p>
+            </div>
+            <div class="faq-list">
+                <div class="faq-item">
+                    <button class="faq-question">
+                        How accurate is the research PodcastGPT provides?
+                        <span>+</span>
+                    </button>
+                    <div class="faq-answer">
+                        Our AI cross-references multiple sources including LinkedIn, company websites, recent interviews, and published content to ensure accuracy. We also provide source links so you can verify key information. Our accuracy rate is over 95% for publicly available information.
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question">
+                        Can I customize the interview questions for my show's style?
+                        <span>+</span>
+                    </button>
+                    <div class="faq-answer">
+                        Absolutely! PodcastGPT learns your interview style and can generate questions for different formats - whether you prefer journalistic, conversational, or technical approaches. Pro and Studio plans include custom prompt templates.
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question">
+                        Does PodcastGPT work with my podcast hosting platform?
+                        <span>+</span>
+                    </button>
+                    <div class="faq-answer">
+                        Yes! We integrate with major platforms like Spotify for Podcasters, Buzzsprout, Libsyn, and others. Our API allows custom integrations for Studio plan users.
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question">
+                        What if my guest has limited online presence?
+                        <span>+</span>
+                    </button>
+                    <div class="faq-answer">
+                        Our AI can work with minimal information and will suggest general industry questions and conversation starters. You can also manually input known information about your guest to improve the research quality.
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question">
+                        Is there a free trial?
+                        <span>+</span>
+                    </button>
+                    <div class="faq-answer">
+                        Yes! All plans include a 14-day free trial with full access to features. No credit card required to start your trial.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>🎤 PodcastGPT</h4>
+                    <p>The AI-powered research assistant that helps podcast hosts create better interviews in less time.</p>
+                    <div class="email-signup">
+                        <input type="email" placeholder="Enter your email">
+                        <button>Subscribe</button>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h4>Product</h4>
+                    <p><a href="#features">Features</a></p>
+                    <p><a href="#pricing">Pricing</a></p>
+                    <p><a href="#">API Documentation</a></p>
+                    <p><a href="#">Integrations</a></p>
+                </div>
+                <div class="footer-section">
+                    <h4>Resources</h4>
+                    <p><a href="#">Blog</a></p>
+                    <p><a href="#">Interview Best Practices</a></p>
+                    <p><a href="#">Podcast Growth Tips</a></p>
+                    <p><a href="#">Help Center</a></p>
+                </div>
+                <div class="footer-section">
+                    <h4>Company</h4>
+                    <p><a href="#">About Us</a></p>
+                    <p><a href="#">Contact</a></p>
+                    <p><a href="#">Privacy Policy</a></p>
+                    <p><a href="#">Terms of Service</a></p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 PodcastGPT. All rights reserved. Made for podcast hosts who value their time.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Simple FAQ toggle functionality
+        document.querySelectorAll('.faq-question').forEach(button => {
+            button.addEventListener('click', () => {
+                const answer = button.nextElementSibling;
+                const icon = button.querySelector('span');
+                
+                if (answer.style.display === 'block') {
+                    answer.style.display = 'none';
+                    icon.textContent = '+';
+                } else {
+                    // Close all other FAQ items
+                    document.querySelectorAll('.faq-answer').forEach(a => a.style.display = 'none');
+                    document.querySelectorAll('.faq-question span').forEach(s => s.textContent = '+');
+                    
+                    // Open clicked item
+                    answer.style.display = 'block';
+                    icon.textContent = '−';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
