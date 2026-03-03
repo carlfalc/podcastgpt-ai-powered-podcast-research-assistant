@@ -1,0 +1,16 @@
+{
+  "name": "podcastgpt-ai-powered-podcast-research-assistant",
+  "version": "0.1.0",
+  "description": "An AI research assistant that helps podcast hosts prepare for interviews by automatically generating research briefs, interview questions, and follow-up topics based on guest backgrounds and expertise",
+  "main": "index.html",
+  "scripts": {
+    "start": "npx serve ."
+  },
+  "keywords": [
+    "ai",
+    "saas",
+    "the-firm"
+  ],
+  "author": "The Firm — AI Venture Studio",
+  "license": "MIT"
+}
