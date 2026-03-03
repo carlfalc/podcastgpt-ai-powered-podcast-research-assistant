@@ -1,0 +1,2 @@
+# podcastgpt-ai-powered-podcast-research-assistant
+An AI research assistant that helps podcast hosts prepare for interviews by automatically generating research briefs, interview questions, and follow-up topics based on guest backgrounds and expertise. With over 2 million active podcasts globally and hosts spending 3-5 hours preparing for each episode, this tool could save thousands of hours while 
